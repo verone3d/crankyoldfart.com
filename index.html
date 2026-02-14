@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRANKYOLDFART.COM - Members Only</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Cinzel:wght@400;700&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #0a0a0a;
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('./images/crankyoldfart-com-splash.jpg') center center / cover no-repeat;
+            filter: brightness(0.6) saturate(0.85);
+            z-index: 0;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.4) 100%);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            max-width: 800px;
+            width: 100%;
+            padding: 2rem;
+        }
+
+        .ornament {
+            color: #d4a826;
+            font-size: 1.5rem;
+            letter-spacing: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            line-height: 1.1;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.9), 0 0 30px rgba(0,0,0,0.7);
+        }
+
+        .hero-title span {
+            display: block;
+            font-size: 0.35em;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 400;
+            letter-spacing: 0.4em;
+            color: #d4a826;
+            text-shadow: 1px 1px 6px rgba(0,0,0,0.9);
+            margin-top: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .divider {
+            width: 120px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #d4a826, transparent);
+            margin: 2rem auto;
+        }
+
+        .hero-tagline {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1rem, 2.5vw, 1.4rem);
+            font-style: italic;
+            color: #ffffff;
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+            text-shadow: 1px 1px 6px rgba(0,0,0,0.9), 0 0 20px rgba(0,0,0,0.6);
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            color: #d4a826;
+            font-size: 0.75rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            animation: pulse 2s ease-in-out infinite;
+            cursor: pointer;
+            text-decoration: none;
+            border: 1px solid #d4a826;
+            padding: 0.6rem 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .scroll-hint:hover {
+            background: rgba(212, 168, 38, 0.15);
+            color: #fff;
+        }
+
+        .scroll-hint::after {
+            content: '';
+            display: block;
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, #d4a826, transparent);
+            margin: 0.5rem auto 0;
+        }
+
+        /* Unauthorized overlay */
+        .unauthorized-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.92);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .unauthorized-overlay.active {
+            display: flex;
+            animation: flashIn 0.15s ease-out;
+        }
+
+        .unauthorized-text {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2rem, 6vw, 4.5rem);
+            color: #cc0000;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            text-shadow: 0 0 20px rgba(204, 0, 0, 0.6), 0 0 60px rgba(204, 0, 0, 0.3);
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .unauthorized-sub {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 1.5rem;
+            letter-spacing: 0.2em;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 50%, 90% { transform: translateX(-8px); }
+            30%, 70% { transform: translateX(8px); }
+        }
+
+        @keyframes flashIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+
+        /* About Section */
+        .section {
+            padding: 5rem 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            color: #ffffff;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            text-shadow: 1px 1px 6px rgba(0,0,0,0.8);
+        }
+
+        .section p {
+            font-size: 1.05rem;
+            line-height: 1.9;
+            color: #e0e0e0;
+            max-width: 650px;
+            margin: 0 auto;
+            font-weight: 400;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+        }
+
+        /* Rules Section */
+        .rules {
+            background: linear-gradient(180deg, #0a0a0a 0%, #111 50%, #0a0a0a 100%);
+            border-top: 1px solid rgba(212, 168, 38, 0.2);
+            border-bottom: 1px solid rgba(212, 168, 38, 0.2);
+        }
+
+        .rules-list {
+            list-style: none;
+            max-width: 600px;
+            margin: 2rem auto 0;
+            text-align: left;
+        }
+
+        .rules-list li {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(212, 168, 38, 0.1);
+            font-size: 1.05rem;
+            color: #e0e0e0;
+            font-weight: 400;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+            display: flex;
+            align-items: baseline;
+            gap: 1rem;
+        }
+
+        .rules-list li:last-child {
+            border-bottom: none;
+        }
+
+        .rule-number {
+            font-family: 'Cinzel', serif;
+            color: #d4a826;
+            font-size: 0.85rem;
+            min-width: 2rem;
+        }
+
+        /* Members Section */
+        .members-badge {
+            display: inline-block;
+            border: 1px solid #d4a826;
+            padding: 1.5rem 3rem;
+            margin-top: 2rem;
+            position: relative;
+        }
+
+        .members-badge::before,
+        .members-badge::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border: 1px solid #d4a826;
+        }
+
+        .members-badge::before {
+            top: -4px;
+            left: -4px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .members-badge::after {
+            bottom: -4px;
+            right: -4px;
+            border-left: none;
+            border-top: none;
+        }
+
+        .members-badge p {
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            letter-spacing: 0.3em;
+            color: #d4a826;
+            text-transform: uppercase;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid rgba(212, 168, 38, 0.15);
+        }
+
+        footer .logo-small {
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            letter-spacing: 0.25em;
+            color: #d4a826;
+            text-transform: uppercase;
+        }
+
+        footer p {
+            font-size: 0.75rem;
+            color: #999999;
+            margin-top: 0.8rem;
+            letter-spacing: 0.1em;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .section {
+                padding: 3.5rem 1.5rem;
+            }
+
+            .members-badge {
+                padding: 1.2rem 2rem;
+            }
+
+            .rules-list {
+                margin: 2rem 1rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="ornament">&#9830; &#9830; &#9830;</div>
+            <h1 class="hero-title">
+                CrankyOldFart
+                <span>Est. Since We Stopped Caring</span>
+            </h1>
+            <div class="divider"></div>
+            <p class="hero-tagline">
+                "Where distinguished gentlemen gather to complain<br>
+                about everything that was better before."
+            </p>
+        </div>
+        <a class="scroll-hint" id="enterBtn">Enter</a>
+    </section>
+
+    <!-- Unauthorized Overlay -->
+    <div class="unauthorized-overlay" id="unauthorizedOverlay">
+        <div class="unauthorized-text">UNAUTHORIZED</div>
+        <div class="unauthorized-sub">Members Only &mdash; By Invitation</div>
+    </div>
+
+    <!-- About -->
+    <section class="section">
+        <h2 class="section-title">The Club</h2>
+        <div class="divider"></div>
+        <p>
+            This is where cranky old farts meet. Not a social network. Not a forum.
+            A private club &mdash; the kind where you don't find us, we find you.
+            If you're here, somebody thought you were cranky enough to belong.
+        </p>
+    </section>
+
+    <!-- Rules -->
+    <section class="section rules">
+        <h2 class="section-title">House Rules</h2>
+        <div class="divider"></div>
+        <ol class="rules-list">
+            <li>
+                <span class="rule-number">I.</span>
+                Membership is by invitation only. No exceptions.
+            </li>
+            <li>
+                <span class="rule-number">II.</span>
+                You do not talk about CrankyOldFart.com to anyone who isn't cranky enough.
+            </li>
+            <li>
+                <span class="rule-number">III.</span>
+                Complaining is encouraged. Whining is not. Know the difference.
+            </li>
+            <li>
+                <span class="rule-number">IV.</span>
+                Respect your fellow cranky old farts. We're all grumpy here.
+            </li>
+            <li>
+                <span class="rule-number">V.</span>
+                If someone asks how to join, the answer is always: "You can't."
+            </li>
+        </ol>
+    </section>
+
+    <!-- Members -->
+    <section class="section">
+        <h2 class="section-title">Membership</h2>
+        <div class="divider"></div>
+        <p>
+            You don't apply. You don't sign up. You get invited by a current member
+            who vouches that you are, in fact, a certified cranky old fart.
+        </p>
+        <div class="members-badge">
+            <p>Invitation Only</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="logo-small">CrankyOldFart.com</div>
+        <p style="margin-top: 1rem;"><a href="mailto:verone@crankyoldfart.com" style="color: #d4a826; text-decoration: none; letter-spacing: 0.1em; font-size: 0.85rem;">verone@crankyoldfart.com</a></p>
+        <p>&copy; All rights reserved. Now get off our lawn.</p>
+    </footer>
+
+    <script>
+        // Generate buzzer sound using Web Audio API
+        function playBuzzer() {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = ctx.createOscillator();
+            const gain = ctx.createGain();
+            oscillator.type = 'sawtooth';
+            oscillator.frequency.setValueAtTime(150, ctx.currentTime);
+            oscillator.frequency.linearRampToValueAtTime(80, ctx.currentTime + 0.4);
+            gain.gain.setValueAtTime(0.3, ctx.currentTime);
+            gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.5);
+            oscillator.connect(gain);
+            gain.connect(ctx.destination);
+            oscillator.start(ctx.currentTime);
+            oscillator.stop(ctx.currentTime + 0.5);
+        }
+
+        const enterBtn = document.getElementById('enterBtn');
+        const overlay = document.getElementById('unauthorizedOverlay');
+
+        enterBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            playBuzzer();
+            overlay.classList.add('active');
+        });
+
+        overlay.addEventListener('click', function() {
+            overlay.classList.remove('active');
+        });
+    </script>
+</body>
+</html>
